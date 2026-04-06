@@ -2,10 +2,7 @@ import {
   escapeHtml,
   filterCompanies,
   formatCampusStatus,
-  formatJobUrlType,
   getFilterOptions,
-  getIndustryGroup,
-  getStats,
   getVisiblePages,
   loadDataset,
   paginate,
@@ -17,137 +14,93 @@ import {
 
 const state = parseListState(window.location.search);
 const elements = {
-  keywordInput: document.querySelector("#keyword-input"),
-  pageSizeSelect: document.querySelector("#page-size-select"),
-  resetButton: document.querySelector("#reset-button"),
-  companyTypeOptions: document.querySelector("#company-type-options"),
-  industryOptions: document.querySelector("#industry-options"),
-  provinceOptions: document.querySelector("#province-options"),
-  linkStatusOptions: document.querySelector("#link-status-options"),
-  resultsGrid: document.querySelector("#results-grid"),
-  pagination: document.querySelector("#pagination"),
+  tableHead: document.querySelector("#table-head"),
+  tableBody: document.querySelector("#table-body"),
   emptyState: document.querySelector("#empty-state"),
-  activeFilters: document.querySelector("#active-filters"),
-  resultsTitle: document.querySelector("#results-title"),
-  snapshotDate: document.querySelector("#snapshot-date"),
-  totalCount: document.querySelector("#total-count"),
-  visibleCount: document.querySelector("#visible-count"),
-  activeCampusCount: document.querySelector("#active-campus-count"),
-  verifiedLinkCount: document.querySelector("#verified-link-count"),
-  typeCount: document.querySelector("#type-count"),
-  industryCount: document.querySelector("#industry-count"),
-  provinceCount: document.querySelector("#province-count"),
-  linkCount: document.querySelector("#link-count")
+  resetButton: document.querySelector("#reset-button"),
+  paginationBar: document.querySelector("#pagination-bar"),
+  paginationSummary: document.querySelector("#pagination-summary"),
+  paginationLinks: document.querySelector("#pagination-links"),
+  externalLinkModal: document.querySelector("#external-link-modal"),
+  externalLinkUrl: document.querySelector("#external-link-url"),
+  externalLinkCancel: document.querySelector("#external-link-cancel"),
+  externalLinkConfirm: document.querySelector("#external-link-confirm")
 };
 
 let dataset = [];
-let meta = null;
 let options = null;
+let openFilterKey = null;
+let qSelection = null;
+let qDraft = state.q;
+let qIsComposing = false;
+let qCommitTimer = null;
 
 initialize().catch((error) => {
   console.error(error);
-  elements.resultsTitle.textContent = "数据加载失败";
-  elements.resultsGrid.innerHTML = `
-    <article class="panel empty-state">
-      <h3>无法加载数据</h3>
-      <p>${escapeHtml(error.message)}</p>
-    </article>
+  elements.tableBody.innerHTML = `
+    <div class="empty-state">
+      <h2>数据加载失败</h2>
+      <p class="muted">${escapeHtml(error.message)}</p>
+    </div>
   `;
 });
 
 async function initialize() {
   const loaded = await loadDataset();
   dataset = loaded.companies;
-  meta = loaded.meta;
   options = getFilterOptions(dataset);
 
-  wireEvents();
-  hydrateControls();
-  renderFilterOptions();
+  wireGlobalEvents();
   render();
 }
 
-function wireEvents() {
-  elements.keywordInput.addEventListener("input", () => {
-    state.q = elements.keywordInput.value.trim();
-    state.page = 1;
-    commitState();
-  });
-
-  elements.pageSizeSelect.addEventListener("change", () => {
-    state.pageSize = Number(elements.pageSizeSelect.value);
-    state.page = 1;
-    commitState();
-  });
-
+function wireGlobalEvents() {
   elements.resetButton.addEventListener("click", () => {
+    qDraft = "";
     state.q = "";
     state.companyType = [];
     state.industry = [];
     state.province = [];
     state.linkStatus = [];
     state.page = 1;
-    state.pageSize = 12;
+    state.pageSize = 10;
     commitState();
+  });
+
+  elements.externalLinkModal.addEventListener("click", (event) => {
+    if (event.target === elements.externalLinkModal) {
+      closeExternalModal();
+    }
+  });
+
+  elements.externalLinkCancel.addEventListener("click", closeExternalModal);
+
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeExternalModal();
+      closeFilterMenus();
+    }
+  });
+
+  document.addEventListener("pointerdown", (event) => {
+    if (!event.target.closest("details[data-filter-menu]")) {
+      closeFilterMenus();
+    }
   });
 
   window.addEventListener("popstate", () => {
     const nextState = parseListState(window.location.search);
     Object.assign(state, nextState);
-    hydrateControls();
+    qDraft = state.q;
     render();
   });
 }
 
-function hydrateControls() {
-  elements.keywordInput.value = state.q;
-  elements.pageSizeSelect.value = String(state.pageSize);
-}
-
-function renderFilterOptions() {
-  renderChoiceGroup(elements.companyTypeOptions, options.companyTypes, state.companyType, "companyType");
-  renderChoiceGroup(elements.industryOptions, options.industries, state.industry, "industry");
-  renderChoiceGroup(elements.provinceOptions, options.provinces, state.province, "province");
-  renderChoiceGroup(elements.linkStatusOptions, options.linkStatuses, state.linkStatus, "linkStatus");
-}
-
-function renderChoiceGroup(container, values, selectedValues, key) {
-  container.innerHTML = values
-    .map((value) => {
-      const isSelected = selectedValues.includes(value);
-      return `
-        <label class="choice-pill ${isSelected ? "is-selected" : ""}">
-          <input type="checkbox" data-key="${key}" value="${escapeHtml(value)}" ${isSelected ? "checked" : ""}>
-          <span>${escapeHtml(value)}</span>
-        </label>
-      `;
-    })
-    .join("");
-
-  container.querySelectorAll("input[type='checkbox']").forEach((input) => {
-    input.addEventListener("change", (event) => {
-      const target = event.currentTarget;
-      const value = target.value;
-      const list = state[key];
-      if (target.checked) {
-        state[key] = unique(list.concat(value));
-      } else {
-        state[key] = list.filter((item) => item !== value);
-      }
-      state.page = 1;
-      commitState();
-    });
-  });
-}
-
 function commitState(push = false) {
-  const params = serializeListState(state);
-  const query = params.toString();
-  const nextUrl = query ? `?${query}` : "./";
+  const params = serializeListState(state).toString();
+  const nextUrl = params ? `?${params}` : window.location.pathname;
   const method = push ? "pushState" : "replaceState";
   window.history[method](null, "", nextUrl);
-  hydrateControls();
-  renderFilterOptions();
   render();
 }
 
@@ -156,200 +109,372 @@ function render() {
   const pageResult = paginate(filtered, state.page, state.pageSize);
   state.page = pageResult.currentPage;
 
-  const visibleStats = getStats(filtered);
+  renderTableHead();
+  renderTableBody(pageResult.items);
+  renderPagination(pageResult);
 
-  elements.snapshotDate.textContent = meta.snapshotDate;
-  elements.totalCount.textContent = String(meta.totalCompanies);
-  elements.visibleCount.textContent = String(pageResult.total);
-  elements.activeCampusCount.textContent = `当前可见校招信号 ${visibleStats.activeCampus}`;
-  elements.verifiedLinkCount.textContent = `已核验链接 ${visibleStats.verifiedLinks}`;
-  elements.resultsTitle.textContent = `共 ${pageResult.total} 家，当前第 ${pageResult.currentPage} / ${pageResult.totalPages} 页`;
-  elements.typeCount.textContent = String(state.companyType.length);
-  elements.industryCount.textContent = String(state.industry.length);
-  elements.provinceCount.textContent = String(state.province.length);
-  elements.linkCount.textContent = String(state.linkStatus.length);
-
-  renderActiveFilters();
-  renderCards(pageResult.items);
-  renderPagination(pageResult.currentPage, pageResult.totalPages);
   elements.emptyState.classList.toggle("hidden", pageResult.total > 0);
+  elements.tableBody.classList.toggle("hidden", pageResult.total === 0);
+  elements.paginationBar.classList.toggle("hidden", pageResult.total === 0);
 }
 
-function renderActiveFilters() {
-  const chips = [];
+function renderTableHead() {
+  elements.tableHead.innerHTML = `
+    <div class="${getHeadCellClassName(Boolean(state.q.trim()))}">
+      <details class="header-filter" data-filter-menu="q" ${openFilterKey === "q" ? "open" : ""}>
+        <summary class="header-filter-summary" title="公司">
+          <span class="${state.q.trim() ? "header-filter-label active" : "header-filter-label"}">公司</span>
+          <span class="${state.q.trim() ? "header-filter-caret active" : "header-filter-caret"}" aria-hidden="true"></span>
+        </summary>
+        <div class="header-filter-menu">
+          <input id="filter-q" class="input header-filter-input" type="text" placeholder="搜索公司" value="${escapeHtml(qDraft)}">
+          ${qDraft ? '<button class="header-filter-clear" type="button" data-clear-filter="q">清空</button>' : ""}
+        </div>
+      </details>
+    </div>
 
-  if (state.q) {
-    chips.push(renderFilterChip(`关键词: ${state.q}`, () => {
-      state.q = "";
-    }));
+    <div class="${getHeadCellClassName(state.companyType.length > 0)}">
+      ${renderMultiChoiceMenu("企业类型", "companyType", options.companyTypes, state.companyType)}
+    </div>
+
+    <div class="${getHeadCellClassName(state.industry.length > 0)}">
+      ${renderMultiChoiceMenu("行业", "industry", options.industries, state.industry)}
+    </div>
+
+    <div class="${getHeadCellClassName(state.province.length > 0)}">
+      ${renderMultiChoiceMenu("工作地点", "province", options.provinces, state.province)}
+    </div>
+
+    <div class="${getHeadCellClassName(state.linkStatus.length > 0)}">
+      ${renderMultiChoiceMenu("招聘链接状态", "linkStatus", options.linkStatuses, state.linkStatus)}
+    </div>
+
+    <div class="company-head-cell company-head-cell-end">
+      <span>操作</span>
+      ${hasActiveFilters() ? '<button class="header-filter-reset" type="button" data-reset-all="true">清空</button>' : ""}
+    </div>
+  `;
+
+  wireTableHeadEvents();
+}
+
+function renderMultiChoiceMenu(label, key, values, selectedValues) {
+  const active = selectedValues.length > 0;
+  return `
+    <details class="header-filter" data-filter-menu="${key}" ${openFilterKey === key ? "open" : ""}>
+      <summary class="header-filter-summary" title="${escapeHtml(label)}">
+        <span class="${active ? "header-filter-label active" : "header-filter-label"}">${escapeHtml(label)}</span>
+        <span class="${active ? "header-filter-caret active" : "header-filter-caret"}" aria-hidden="true"></span>
+      </summary>
+      <div class="header-filter-menu">
+        ${active ? `<button class="header-filter-clear" type="button" data-clear-filter="${key}">清空</button>` : ""}
+        <div class="header-filter-list">
+          ${values
+            .map((value) => {
+              const selected = selectedValues.includes(value);
+              return `
+                <button class="${selected ? "header-filter-option selected" : "header-filter-option"}" type="button" data-toggle-filter="${key}" data-value="${escapeHtml(value)}">
+                  <span class="header-filter-check">${selected ? "✓" : ""}</span>
+                  <span>${escapeHtml(value)}</span>
+                </button>
+              `;
+            })
+            .join("")}
+        </div>
+      </div>
+    </details>
+  `;
+}
+
+function wireTableHeadEvents() {
+  const qInput = document.querySelector("#filter-q");
+  if (qInput) {
+    qInput.addEventListener("compositionstart", () => {
+      qIsComposing = true;
+    });
+
+    qInput.addEventListener("compositionend", (event) => {
+      qIsComposing = false;
+      qDraft = event.currentTarget.value;
+      qSelection = {
+        start: event.currentTarget.selectionStart ?? event.currentTarget.value.length,
+        end: event.currentTarget.selectionEnd ?? event.currentTarget.value.length
+      };
+      queueQCommit(true);
+    });
+
+    qInput.addEventListener("input", (event) => {
+      qDraft = event.currentTarget.value;
+      qSelection = {
+        start: event.currentTarget.selectionStart ?? event.currentTarget.value.length,
+        end: event.currentTarget.selectionEnd ?? event.currentTarget.value.length
+      };
+      openFilterKey = "q";
+      if (!qIsComposing) {
+        queueQCommit(false);
+      }
+    });
   }
 
-  for (const value of state.companyType) {
-    chips.push(renderFilterChip(value, () => {
-      state.companyType = state.companyType.filter((item) => item !== value);
-    }));
-  }
-
-  for (const value of state.industry) {
-    chips.push(renderFilterChip(value, () => {
-      state.industry = state.industry.filter((item) => item !== value);
-    }));
-  }
-
-  for (const value of state.province) {
-    chips.push(renderFilterChip(value, () => {
-      state.province = state.province.filter((item) => item !== value);
-    }));
-  }
-
-  for (const value of state.linkStatus) {
-    chips.push(renderFilterChip(value, () => {
-      state.linkStatus = state.linkStatus.filter((item) => item !== value);
-    }));
-  }
-
-  elements.activeFilters.innerHTML = chips.join("");
-  elements.activeFilters.classList.toggle("hidden", chips.length === 0);
-
-  elements.activeFilters.querySelectorAll("button[data-remove]").forEach((button) => {
+  document.querySelectorAll("[data-clear-filter]").forEach((button) => {
     button.addEventListener("click", () => {
-      const type = button.dataset.remove;
-      const value = button.dataset.value;
-
-      if (type === "keyword") {
+      const key = button.dataset.clearFilter;
+      openFilterKey = key;
+      if (key === "q") {
+        qDraft = "";
         state.q = "";
       } else {
-        state[type] = state[type].filter((item) => item !== value);
+        state[key] = [];
       }
-
       state.page = 1;
       commitState();
     });
   });
+
+  document.querySelectorAll("[data-toggle-filter]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.toggleFilter;
+      const value = button.dataset.value;
+      openFilterKey = key;
+      state[key] = toggleValue(state[key], value);
+      state.page = 1;
+      commitState();
+    });
+  });
+
+  document.querySelectorAll("[data-reset-all]").forEach((button) => {
+    button.addEventListener("click", () => {
+      qDraft = "";
+      state.q = "";
+      state.companyType = [];
+      state.industry = [];
+      state.province = [];
+      state.linkStatus = [];
+      state.page = 1;
+      commitState();
+    });
+  });
+
+  document.querySelectorAll("details[data-filter-menu]").forEach((details) => {
+    details.addEventListener("toggle", () => {
+      if (!details.open) {
+        if (openFilterKey === details.dataset.filterMenu) {
+          openFilterKey = null;
+        }
+        return;
+      }
+
+      openFilterKey = details.dataset.filterMenu;
+
+      document.querySelectorAll("details[data-filter-menu]").forEach((other) => {
+        if (other !== details) {
+          other.open = false;
+        }
+      });
+    });
+  });
+
+  if (openFilterKey === "q" && qInput) {
+    qInput.focus({ preventScroll: true });
+    if (qSelection) {
+      qInput.setSelectionRange(qSelection.start, qSelection.end);
+    }
+  }
 }
 
-function renderFilterChip(label) {
-  const type = inferRemovalKey(label);
-  return `<span class="active-filter-chip">
-    ${escapeHtml(label)}
-    <button type="button" data-remove="${type.key}" data-value="${escapeHtml(type.value)}" aria-label="移除 ${escapeHtml(label)}">×</button>
-  </span>`;
+function queueQCommit(immediate) {
+  if (qCommitTimer) {
+    window.clearTimeout(qCommitTimer);
+    qCommitTimer = null;
+  }
+
+  const apply = () => {
+    state.q = qDraft.trim();
+    state.page = 1;
+    commitState();
+  };
+
+  if (immediate) {
+    apply();
+    return;
+  }
+
+  qCommitTimer = window.setTimeout(() => {
+    qCommitTimer = null;
+    apply();
+  }, 180);
 }
 
-function inferRemovalKey(label) {
-  if (label.startsWith("关键词: ")) {
-    return { key: "keyword", value: "" };
-  }
-
-  if (state.companyType.includes(label)) {
-    return { key: "companyType", value: label };
-  }
-
-  if (state.industry.includes(label)) {
-    return { key: "industry", value: label };
-  }
-
-  if (state.province.includes(label)) {
-    return { key: "province", value: label };
-  }
-
-  return { key: "linkStatus", value: label };
-}
-
-function renderCards(companies) {
-  elements.resultsGrid.innerHTML = companies
+function renderTableBody(companies) {
+  elements.tableBody.innerHTML = companies
     .map((company) => {
       const locationLabel = company.provinces[0] === "全国" ? "全国" : company.provinces.join(" / ");
-      const industryGroup = getIndustryGroup(company.industry);
       return `
-        <article class="result-card">
-          <div class="result-card-top">
-            <div>
-              <p class="card-eyebrow">${escapeHtml(company.companyType)} · ${escapeHtml(company.ownershipType)}</p>
-              <h3>${escapeHtml(company.name)}</h3>
-              <p class="card-description">${escapeHtml(company.description)}</p>
-            </div>
-            <span class="confidence-badge confidence-${escapeHtml(company.confidenceLevel)}">${escapeHtml(company.confidenceLevel)} 级</span>
+        <article class="company-row">
+          <div class="company-row-cell company-row-main">
+            <h3>
+              <a href="${escapeHtml(company.primaryJobUrl)}" target="_blank" rel="noreferrer">${escapeHtml(company.name)}</a>
+            </h3>
           </div>
 
-          <div class="card-meta-grid">
-            <div>
-              <span class="meta-label">行业</span>
-              <strong>${escapeHtml(company.industry)}</strong>
-              <span class="meta-subtle">${escapeHtml(industryGroup)}</span>
-            </div>
-            <div>
-              <span class="meta-label">工作地点</span>
-              <strong>${escapeHtml(locationLabel)}</strong>
-              <span class="meta-subtle">${escapeHtml(company.cities.join(" / "))}</span>
-            </div>
-            <div>
-              <span class="meta-label">校招状态</span>
-              <strong>${escapeHtml(formatCampusStatus(company.campusHiringStatus))}</strong>
-              <span class="meta-subtle">最近信号 ${escapeHtml(company.campusHiringLastSeenAt)}</span>
-            </div>
-            <div>
-              <span class="meta-label">招聘链接</span>
-              <strong>${escapeHtml(formatJobUrlType(company.primaryJobUrlType))}</strong>
-              <span class="meta-subtle">${company.primaryJobUrlVerified ? "已核验" : "待复核"}</span>
-            </div>
+          <div class="company-row-cell">
+            <span class="row-label">企业类型</span>
+            <span class="row-value">${escapeHtml(company.companyType)}</span>
           </div>
 
-          <div class="tag-row">
-            ${(company.tags || []).slice(0, 5).map((tag) => `<span class="tag-chip">${escapeHtml(tag)}</span>`).join("")}
+          <div class="company-row-cell">
+            <span class="row-label">行业</span>
+            <span class="row-value">${escapeHtml(company.industry)}</span>
           </div>
 
-          <div class="card-actions">
-            <a class="primary-button" href="${escapeHtml(company.primaryJobUrl)}" target="_blank" rel="noreferrer">查看招聘</a>
-            <a class="secondary-button" href="./company.html?slug=${encodeURIComponent(company.slug)}">查看详情</a>
+          <div class="company-row-cell">
+            <span class="row-label">工作地点</span>
+            <span class="row-value row-ellipsis" title="${escapeHtml(locationLabel)}">${escapeHtml(locationLabel)}</span>
+          </div>
+
+          <div class="company-row-cell">
+            <span class="row-label">招聘链接状态</span>
+            <span class="${company.primaryJobUrlVerified ? "chip success" : "chip warning"}">${company.primaryJobUrlVerified ? "已核验" : "待复核"}</span>
+          </div>
+
+          <div class="company-row-actions">
+            <button class="button row-button external-link-trigger" type="button" data-href="${escapeHtml(company.primaryJobUrl)}">查看招聘</button>
+            <a class="button-secondary row-button" href="./company.html?slug=${encodeURIComponent(company.slug)}">详情</a>
           </div>
         </article>
       `;
     })
     .join("");
+
+  elements.tableBody.querySelectorAll(".external-link-trigger").forEach((button) => {
+    button.addEventListener("click", () => openExternalModal(button.dataset.href));
+  });
 }
 
-function renderPagination(page, totalPages) {
-  if (totalPages <= 1) {
-    elements.pagination.innerHTML = "";
-    return;
-  }
+function renderPagination(pageResult) {
+  elements.paginationSummary.innerHTML = `
+    <span>共 ${pageResult.total} 条</span>
+    <span>第 ${pageResult.currentPage} / ${pageResult.totalPages} 页</span>
+  `;
 
-  const pages = getVisiblePages(page, totalPages);
+  const pages = getVisiblePages(pageResult.currentPage, pageResult.totalPages);
   const pieces = [];
 
-  pieces.push(renderPaginationButton("上一页", page > 1 ? page - 1 : null, page <= 1));
+  pieces.push(renderPageLink("上一页", pageResult.currentPage - 1, pageResult.currentPage <= 1, false));
 
-  for (let index = 0; index < pages.length; index += 1) {
-    const current = pages[index];
+  pages.forEach((value, index) => {
     const previous = pages[index - 1];
-    if (previous && current - previous > 1) {
-      pieces.push(`<span class="pagination-gap">…</span>`);
+    if (previous && value - previous > 1) {
+      pieces.push('<span class="pagination-gap">…</span>');
     }
-    pieces.push(renderPaginationButton(String(current), current, false, current === page));
-  }
+    pieces.push(renderPageLink(String(value), value, false, value === pageResult.currentPage));
+  });
 
-  pieces.push(renderPaginationButton("下一页", page < totalPages ? page + 1 : null, page >= totalPages));
+  pieces.push(renderPageLink("下一页", pageResult.currentPage + 1, pageResult.currentPage >= pageResult.totalPages, false));
+  pieces.push(renderPageSizeSelect(pageResult.pageSize));
 
-  elements.pagination.innerHTML = pieces.join("");
-  elements.pagination.querySelectorAll("button[data-page]").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.page = Number(button.dataset.page);
+  elements.paginationLinks.innerHTML = pieces.join("");
+
+  elements.paginationLinks.querySelectorAll("[data-page]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      const nextPage = Number(link.dataset.page);
+      state.page = nextPage;
       commitState(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   });
+
+  const pageSizeSelect = elements.paginationLinks.querySelector("#page-size-select");
+  if (pageSizeSelect) {
+    pageSizeSelect.addEventListener("change", (event) => {
+      state.pageSize = Number(event.currentTarget.value);
+      state.page = 1;
+      commitState();
+    });
+  }
 }
 
-function renderPaginationButton(label, nextPage, disabled, active = false) {
-  const classes = ["pagination-button"];
-  if (active) {
-    classes.push("is-active");
+function renderPageLink(label, page, disabled, active) {
+  if (disabled) {
+    return `<span class="pagination-link disabled">${escapeHtml(label)}</span>`;
   }
 
+  return `<a class="${active ? "pagination-link active" : "pagination-link"}" href="${escapeHtml(buildPageHref(page))}" data-page="${page}">${escapeHtml(label)}</a>`;
+}
+
+function renderPageSizeSelect(value) {
   return `
-    <button class="${classes.join(" ")}" type="button" ${disabled ? "disabled" : `data-page="${nextPage}"`}>
-      ${escapeHtml(label)}
-    </button>
+    <label class="page-size-select-wrap">
+      <span>每页</span>
+      <select id="page-size-select" class="select page-size-select">
+        ${[10, 50, 100]
+          .map((option) => `<option value="${option}" ${value === option ? "selected" : ""}>${option} 条</option>`)
+          .join("")}
+      </select>
+    </label>
   `;
+}
+
+function buildPageHref(page) {
+  const params = serializeListState({
+    ...state,
+    page
+  }).toString();
+
+  return params ? `?${params}` : window.location.pathname;
+}
+
+function getHeadCellClassName(active, alignEnd = false) {
+  if (active && alignEnd) {
+    return "company-head-cell company-head-cell-active company-head-cell-end";
+  }
+
+  if (active) {
+    return "company-head-cell company-head-cell-active";
+  }
+
+  if (alignEnd) {
+    return "company-head-cell company-head-cell-end";
+  }
+
+  return "company-head-cell";
+}
+
+function toggleValue(values, value) {
+  return values.includes(value) ? values.filter((item) => item !== value) : unique([...values, value]);
+}
+
+function hasActiveFilters() {
+  return Boolean(
+    state.q ||
+      state.companyType.length > 0 ||
+      state.industry.length > 0 ||
+      state.province.length > 0 ||
+      state.linkStatus.length > 0
+  );
+}
+
+function closeFilterMenus() {
+  openFilterKey = null;
+  qSelection = null;
+  if (qCommitTimer) {
+    window.clearTimeout(qCommitTimer);
+    qCommitTimer = null;
+  }
+  document.querySelectorAll("details[data-filter-menu]").forEach((details) => {
+    details.open = false;
+  });
+}
+
+function openExternalModal(href) {
+  elements.externalLinkUrl.textContent = href;
+  elements.externalLinkConfirm.href = href;
+  elements.externalLinkModal.classList.remove("hidden");
+}
+
+function closeExternalModal() {
+  elements.externalLinkUrl.textContent = "";
+  elements.externalLinkConfirm.href = "#";
+  elements.externalLinkModal.classList.add("hidden");
 }

@@ -11,116 +11,39 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Campus Hiring Signal Index</p>
-          <h1>校招公司池</h1>
-          <p class="hero-text">
-            聚合在中国有校招信号的公司，并按企业类型、行业、工作地点、链接核验状态进行筛选。
-          </p>
-        </div>
-        <div class="hero-card">
-          <div class="metric">
-            <span class="metric-label">数据快照</span>
-            <strong id="snapshot-date">加载中</strong>
-          </div>
-          <div class="metric">
-            <span class="metric-label">公司总数</span>
-            <strong id="total-count">-</strong>
-          </div>
-          <div class="metric">
-            <span class="metric-label">当前结果</span>
-            <strong id="visible-count">-</strong>
-          </div>
-          <a class="ghost-button" href="./about.html">查看口径说明</a>
-        </div>
-      </header>
+    <main class="shell">
+      <section class="results-section" id="results">
+        <div class="company-table">
+          <div id="table-head" class="company-table-head company-table-head-filters"></div>
+          <div id="table-body" class="company-table-body"></div>
 
-      <main class="layout">
-        <aside class="filters">
-          <div class="filters-sticky">
-            <section class="panel panel-intro">
-              <h2>筛选器</h2>
-              <p>所有筛选和分页都在浏览器中完成，适合直接托管到 GitHub Pages。</p>
-            </section>
-
-            <section class="panel">
-              <label class="field">
-                <span>关键词</span>
-                <input id="keyword-input" class="text-input" type="search" placeholder="公司名、行业、城市、标签" />
-              </label>
-
-              <label class="field">
-                <span>每页条数</span>
-                <select id="page-size-select" class="select-input">
-                  <option value="12">12 条</option>
-                  <option value="24">24 条</option>
-                  <option value="48">48 条</option>
-                </select>
-              </label>
-
-              <div class="button-row">
-                <button id="reset-button" class="primary-button" type="button">清空筛选</button>
-              </div>
-            </section>
-
-            <section class="panel">
-              <div class="filter-section-header">
-                <h3>企业类型</h3>
-                <span id="type-count" class="filter-count">0</span>
-              </div>
-              <div id="company-type-options" class="choice-list"></div>
-            </section>
-
-            <section class="panel">
-              <div class="filter-section-header">
-                <h3>行业分组</h3>
-                <span id="industry-count" class="filter-count">0</span>
-              </div>
-              <div id="industry-options" class="choice-list"></div>
-            </section>
-
-            <section class="panel">
-              <div class="filter-section-header">
-                <h3>工作省份</h3>
-                <span id="province-count" class="filter-count">0</span>
-              </div>
-              <div id="province-options" class="choice-list choice-list-scroll"></div>
-            </section>
-
-            <section class="panel">
-              <div class="filter-section-header">
-                <h3>链接状态</h3>
-                <span id="link-count" class="filter-count">0</span>
-              </div>
-              <div id="link-status-options" class="choice-list"></div>
-            </section>
-          </div>
-        </aside>
-
-        <section class="content">
-          <div class="toolbar">
-            <div>
-              <p class="toolbar-label">当前结果</p>
-              <h2 id="results-title">加载中</h2>
-            </div>
-            <div class="toolbar-meta">
-              <span id="active-campus-count" class="chip">-</span>
-              <span id="verified-link-count" class="chip">-</span>
+          <div id="empty-state" class="empty-state hidden">
+            <h2>没有匹配结果</h2>
+            <p class="muted">可以调整当前筛选条件，或直接返回全部公司列表。</p>
+            <div class="empty-state-actions">
+              <button id="reset-button" class="button" type="button">返回全部公司</button>
             </div>
           </div>
 
-          <div id="active-filters" class="active-filters"></div>
-          <div id="results-grid" class="results-grid"></div>
-          <div id="empty-state" class="panel empty-state hidden">
-            <h3>没有匹配结果</h3>
-            <p>可以尝试减少筛选项，或者只保留关键词搜索。</p>
+          <div id="pagination-bar" class="pagination-bar hidden">
+            <div id="pagination-summary" class="pagination-summary"></div>
+            <div id="pagination-links" class="pagination-links"></div>
           </div>
-          <nav id="pagination" class="pagination" aria-label="分页"></nav>
-        </section>
-      </main>
-    </div>
+        </div>
+      </section>
+
+      <div id="external-link-modal" class="external-link-modal-backdrop hidden" role="presentation">
+        <div aria-modal="true" class="external-link-modal" role="dialog">
+          <h3>即将跳转到招聘网站</h3>
+          <p class="muted">将打开以下链接：</p>
+          <p id="external-link-url" class="external-link-url"></p>
+          <div class="external-link-actions">
+            <button id="external-link-cancel" class="button-secondary" type="button">取消</button>
+            <a id="external-link-confirm" class="button" href="#" rel="noreferrer" target="_blank">继续打开</a>
+          </div>
+        </div>
+      </div>
+    </main>
 
     <script type="module" src="./app.js"></script>
   </body>
