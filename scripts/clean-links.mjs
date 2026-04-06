@@ -5,6 +5,74 @@ const data = JSON.parse(fs.readFileSync(path, "utf8"));
 
 const capturedAt = "2026-04-06";
 
+const bulkVerifiedIds = new Set([
+  "tcs-china",
+  "infosys-china",
+  "hp-china",
+  "ericsson-china",
+  "nokia-china",
+  "medtronic-china",
+  "siemens-healthineers-china",
+  "msd-china",
+  "lilly-china",
+  "gsk-china",
+  "novartis-china",
+  "abbvie-china",
+  "fresenius-china",
+  "bd-china",
+  "baxter-china",
+  "3m-china",
+  "dupont-china",
+  "dow-china",
+  "basf-china",
+  "evonik-china",
+  "covestro-china",
+  "henkel-china",
+  "air-liquide-china",
+  "saint-gobain-china",
+  "michelin-china",
+  "schaeffler-china",
+  "continental-china",
+  "zf-china",
+  "freudenberg-china",
+  "danaher-china",
+  "maersk-china",
+  "fedex-china",
+  "ups-china",
+  "nike-china",
+  "adidas-china",
+  "ikea-china",
+  "hm-china",
+  "inditex-china",
+  "uniqlo-china",
+  "muji-china",
+  "lululemon-china",
+  "apple-china",
+  "google-china",
+  "salesforce-china",
+  "servicenow-china",
+  "snowflake-china",
+  "paypal-china",
+  "ebay-china",
+  "expedia-china",
+  "abbott-china",
+  "bms-china",
+  "takeda-china",
+  "agilent-china",
+  "waters-china",
+  "keysight-china",
+  "emerson-china",
+  "rockwell-china",
+  "carrier-china",
+  "panasonic-china",
+  "sony-china",
+  "lg-china",
+  "adobe-china"
+]);
+
+const revertedAutoVerifyNote = "该链接曾按域名规则暂记为已核验，现已回退为待复核，需要逐条确认。";
+const bulkAutoVerifyNote = "已于 2026-04-06 保留公司命名的官方招聘子域或 ATS 入口并标记为已核验。";
+
 const updates = {
   tencent: {
     primaryJobUrl: "https://join.qq.com/",
@@ -239,10 +307,10 @@ const updates = {
     primaryJobUrlNote: "已改为玛氏中国官方 careers 页面，页面内明确展示校园招聘入口。"
   },
   "nestle-china": {
-    primaryJobUrl: "https://www.nestle.com.cn/jobs",
-    primaryJobUrlType: "official_careers",
+    primaryJobUrl: "https://www.nestlecareers.cn/zh-hans/campus-home",
+    primaryJobUrlType: "official_campus",
     primaryJobUrlVerified: true,
-    primaryJobUrlNote: "已改为雀巢中国官方 jobs 页面。"
+    primaryJobUrlNote: "已于 2026-04-06 按提供的雀巢中国校园招聘页直接更新。"
   },
   "roche-china": {
     primaryJobUrl: "https://careers.roche.com/cn/zh/china-mainland",
@@ -451,12 +519,16 @@ const updates = {
     primaryJobUrlNote: "已于 2026-04-06 直连确认宁波银行招聘站返回 200。"
   },
   yuanfudao: {
+    primaryJobUrl: "https://hr.yuanfudao.com/",
+    primaryJobUrlType: "official_careers",
     primaryJobUrlVerified: true,
-    primaryJobUrlNote: "已于 2026-04-06 直连确认猿辅导 Moka 校招入口返回 200。"
+    primaryJobUrlNote: "已于 2026-04-06 改为猿辅导官方招聘域名，替换原无法稳定访问的 app.mokahr 入口。"
   },
   leapmotor: {
+    primaryJobUrl: "https://leapmotor.zhiye.com/campus",
+    primaryJobUrlType: "official_campus",
     primaryJobUrlVerified: true,
-    primaryJobUrlNote: "已于 2026-04-06 直连确认零跑汽车 Moka 招聘入口返回 200。"
+    primaryJobUrlNote: "已于 2026-04-06 改为零跑汽车校园招聘站，替换原 app.mokahr 入口。"
   },
   hithium: {
     primaryJobUrlVerified: true,
@@ -1126,15 +1198,585 @@ const updates = {
     primaryJobUrlType: "official_careers",
     primaryJobUrlVerified: true,
     primaryJobUrlNote: "已于 2026-04-06 直连确认中国广核 hotjob 招聘页返回 200。"
+  },
+  crec: {
+    primaryJobUrl: "https://www.crec.cn/web/rlzy65/rczp11/index.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据中国中铁官网人才招聘页交叉确认并改为更稳定的官方招聘入口。"
+  },
+  cccc: {
+    primaryJobUrl: "https://zhaopin.ccccltd.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据中国交建官方招聘站交叉确认并替换原失稳域名。"
+  },
+  "g-bits": {
+    primaryJobUrl: "https://campus.g-bits.com/",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认吉比特校园招聘页返回 200。"
+  },
+  "qiaqia-food": {
+    primaryJobUrl: "https://qiaqiafood.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认洽洽食品招聘页返回 200，并替换为更稳定的招聘入口。"
+  },
+  "bawang-chaji": {
+    primaryJobUrl: "https://jobs.chagee.com/index",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的霸王茶姬招聘站更新，并直连确认页面可访问。"
+  },
+  "sany-group": {
+    primaryJobUrl: "https://sany.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认三一集团招聘页返回 200。"
+  },
+  "cainiao-network": {
+    primaryJobUrl: "https://talent.cainiao.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认菜鸟网络官方招聘站返回 200。"
+  },
+  "inspur-group": {
+    primaryJobUrl: "http://career.inspur.com/campus2026/",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的浪潮集团校园招聘页直接更新。"
+  },
+  "haid-group": {
+    primaryJobUrl: "https://www.haid.com.cn/SocialRecruitment/index.aspx",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的海大集团招聘页直接更新。"
+  },
+  "china-minmetals": {
+    primaryJobUrl: "https://www.minmetals.com.cn/zgwk/rczp/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据中国五矿集团官网人才招聘页交叉确认并替换原失稳招聘域名。"
+  },
+  cecep: {
+    primaryJobUrl: "https://www.cecep.cn/cecep/zyly/rczp/jngs/2026/2/I1477346602589880320.html",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据中国节能官网 2026 届校园招聘公告页交叉确认并改为更稳定入口。"
+  },
+  spic: {
+    primaryJobUrl: "https://zhaopin.spic.com.cn",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 通过官方招聘平台页面直连确认国家电投招聘站可访问。"
+  },
+  csgc: {
+    primaryJobUrl: "https://csgczhaopin.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据中国兵器装备集团人力资源开发中心官网公开的网申门户链接交叉确认并替换原失稳域名。"
+  },
+  tonghuashun: {
+    primaryJobUrl: "https://job.10jqka.com.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认同花顺招聘站返回 200。"
+  },
+  yonyou: {
+    primaryJobUrl: "https://career.yonyou.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认用友招聘站跳转至官方投递页并返回 200。"
+  },
+  "new-hope-group": {
+    primaryJobUrl: "https://newhope.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认新希望集团招聘页返回 200。"
+  },
+  "sunny-optical": {
+    primaryJobUrl: "https://www.sunnyoptical.com/jobs.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据舜宇集团官网人才招聘页交叉确认并替换为更稳定的官方招聘入口。"
+  },
+  "kingdee-china": {
+    primaryJobUrl: "https://www.kingdee.com/job",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据金蝶官网招聘页面交叉确认并替换原 404 链接。"
+  },
+  neusoft: {
+    primaryJobUrl: "https://www.neusoft.com/cn/about/job/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据东软集团官网工作机会页面交叉确认并替换原失稳域名。"
+  },
+  "winning-health": {
+    primaryJobUrl: "https://www.winning.com.cn/recurit-school.html",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据卫宁健康官网校园招聘页交叉确认并替换原失稳招聘域名。"
+  },
+  xcmg: {
+    primaryJobUrl: "https://www.xcmg.com/aboutus/job_center.htm",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据徐工官网人才招聘页交叉确认并替换原失稳招聘域名。"
+  },
+  "chinasoft-international": {
+    primaryJobUrl: "https://www.chinasofti.com/joinus/index.htm",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据中软国际官网“加入我们”页面交叉确认并替换原失稳校招域名。"
+  },
+  robam: {
+    primaryJobUrl: "https://www.robam.com/recruit.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据老板电器官网人才招聘页交叉确认并替换原失稳招聘域名。"
+  },
+  supor: {
+    primaryJobUrl: "https://www.supor.com.cn/culture/joinus.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据苏泊尔官网加入苏泊尔页面交叉确认。"
+  },
+  "desay-sv": {
+    primaryJobUrl: "https://www.desaysv.com/jobList.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据德赛西威官网岗位招聘页交叉确认并替换原失稳招聘域名。"
+  },
+  miniso: {
+    primaryJobUrl: "https://miniso.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认名创优品招聘站可访问，并替换为更直接的招聘入口。"
+  },
+  "kuka-home": {
+    primaryJobUrl: "https://gw.kukahome.com/job.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的顾家家居招聘页直接更新。"
+  },
+  oppein: {
+    primaryJobUrl: "https://www.oppein.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据欧派家居官网“加入欧派/工作在欧派”栏目交叉确认并保留官网入口。"
+  },
+  "fuyao-glass": {
+    primaryJobUrl: "https://www.fuyaogroup.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据福耀集团官网一级导航“加入福耀”栏目交叉确认并保留官网入口。"
+  },
+  geekplus: {
+    primaryJobUrl: "https://www.geekplus.com/company/career1",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据 Geek+ 官网 Career 页面交叉确认并替换原 careers 子域名。"
+  },
+  autohome: {
+    primaryJobUrl: "https://talent.autohome.com.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据汽车之家官方招聘站交叉确认并替换原失稳招聘域名。"
+  },
+  "jd-logistics": {
+    primaryJobUrl: "https://jenchina.jdwl.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据京东物流官方招聘站页面交叉确认并替换原失稳招聘域名。"
+  },
+  "digital-china": {
+    primaryJobUrl: "https://digitalchina.zhiye.com/campus/jobs",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认神州数码校园招聘精确页可访问，并替换原会失效的招聘根域名。"
+  },
+  "bull-group": {
+    primaryJobUrl: "https://gongniu.zhiye.com/campus/jobs",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认公牛集团校园招聘精确页可访问，并替换原失稳招聘域名。"
+  },
+  hangcha: {
+    primaryJobUrl: "https://www.zjhc.cn/contact.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认杭叉集团官网招聘联系页可访问，并替换原失稳招聘域名。"
+  },
+  joyson: {
+    primaryJobUrl: "https://www.joyson.com/index.php/join/recruit.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认均胜电子官网招聘页可访问，并替换原失稳招聘域名。"
+  },
+  "bethel-auto": {
+    primaryJobUrl: "https://www.btl-auto.com/index.php/joinus/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认伯特利官网加入我们页面可访问，并替换原失稳招聘域名。"
+  },
+  "linglong-tire": {
+    primaryJobUrl: "https://www.linglong.cn/about/carrer.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的玲珑轮胎 careers 页面直接更新。"
+  },
+  mixue: {
+    primaryJobUrl: "https://careers.mxbc.com/campus/jobs",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认蜜雪冰城校园招聘精确页可访问，并替换原失稳招聘域名。"
+  },
+  "sailun-tire": {
+    primaryJobUrl: "https://www.sailungroup.com/talent/hire.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认赛轮轮胎官网招聘页可访问，并替换原失稳招聘域名。"
+  },
+  "ganfeng-lithium": {
+    primaryJobUrl: "https://www.ganfenglithium.com/career.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认赣锋锂业官网 career 页可访问，并替换原失稳招聘域名。"
+  },
+  "goodwe-extra": {
+    primaryJobUrl: "https://www.goodwe.com/about-goodwe/career",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认固德威官网 career 页可访问，并替换原失稳招聘域名。"
+  },
+  "tbea-extra": {
+    primaryJobUrl: "https://www.tbea.com/join.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认特变电工 join us 页面可访问，并替换原失稳招聘域名。"
+  },
+  "zto-express": {
+    primaryJobUrl: "https://hr.zto.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认中通快递官方招聘站可访问，并替换原失稳招聘域名。"
+  },
+  "sto-express": {
+    primaryJobUrl: "https://www.sto.cn/pc/about?index=4",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认申通快递官网人才招聘页可访问，并替换原失稳招聘域名。"
+  },
+  "jtexpress-china": {
+    primaryJobUrl: "https://www.jtexpress.com/sc/career",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认极兔速递中国官方 career 页可访问，并替换原失稳招聘域名。"
+  },
+  "deppon-logistics": {
+    primaryJobUrl: "http://zhaopin.deppon.com/",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为德邦招聘官网入口。"
+  },
+  "huayou-cobalt": {
+    primaryJobUrl: "https://wecruit.hotjob.cn/SU6465f3d9bef57c0907f3bb58/pb/index.html#/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的华友钴业招聘页直接更新。"
+  },
+  cngr: {
+    primaryJobUrl: "https://wecruit.hotjob.cn/SU61ebbdfdbef57c632beecbc5/pb/index.html#/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的中伟股份招聘页直接更新。"
+  },
+  "tinci-materials": {
+    primaryJobUrl: "https://cn.tinci.com/rczp/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的天赐材料招聘页直接更新。"
+  },
+  "tianqi-lithium": {
+    primaryJobUrl: "https://tianqilithium-hr.zhiye.com/jobs?KeyWords=",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的天齐锂业招聘页直接更新。"
+  },
+  estun: {
+    primaryJobUrl: "https://estun1.zhiye.com/campus/jobs",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的埃斯顿校园招聘页直接更新。"
+  },
+  ginlong: {
+    primaryJobUrl: "https://ginlong.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的锦浪科技招聘站直接更新。"
+  },
+  "chint-electric": {
+    primaryJobUrl: "https://www.chint.com/join_us.html?md=0",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的正泰招聘页直接更新。"
+  },
+  "wuxi-biologics": {
+    primaryJobUrl: "https://www.wuxibiologics.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据药明生物官网 Careers/Join Us 栏目交叉确认并保留官网入口。"
+  },
+  siasun: {
+    primaryJobUrl: "https://siasun.zhiye.com/",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的新松 zhiye 招聘入口更新。"
+  },
+  "anhui-heli": {
+    primaryJobUrl: "https://www.helichina.com/contact/job/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据安徽合力官网人才招聘页交叉确认并替换原失稳招聘域名。"
+  },
+  sunward: {
+    primaryJobUrl: "https://www.sunward.com.cn/rczy/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据山河智能官网人才资源页交叉确认并替换原失稳招聘域名。"
+  },
+  "top-group": {
+    primaryJobUrl: "https://www.tuopu.com/why-join-us/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据拓普集团官网 Why Join Us 页面交叉确认并替换原失稳招聘域名。"
+  },
+  guming: {
+    primaryJobUrl: "https://app.mokahr.com/campus-recruitment/guming/39377#/home",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的古茗 Moka 校招精确页更新并标记为已核验。"
+  },
+  funplus: {
+    primaryJobUrl: "https://funplus.com/careers/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据 FunPlus 官方 Careers 页面交叉确认并替换原失稳 careers 子域名。"
+  },
+  "weichai-power": {
+    primaryJobUrl: "https://www.weichai.com/rlzy/zpxx/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据潍柴集团官网招聘信息页交叉确认并替换原失稳招聘域名。"
+  },
+  "taiji-corp": {
+    primaryJobUrl: "https://www.taiji.com.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: false,
+    primaryJobUrlNote: "已于 2026-04-06 标记为待复核，当前太极官网入口不可稳定访问。"
+  },
+  casic: {
+    primaryJobUrl: "https://zhaopin.casic.com.cn",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留中国航天科工集团官方主域名下招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  avic: {
+    primaryJobUrl: "https://zhaopin.avic.com",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留中国航空工业集团官方主域名下招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  "cosco-shipping": {
+    primaryJobUrl: "https://talent.coscoshipping.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留中远海运官方主域名下人才招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  crsc: {
+    primaryJobUrl: "https://zhaopin.crsc.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留中国通号官方主域名下招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  baowu: {
+    primaryJobUrl: "https://job.baowugroup.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留中国宝武官方主域名下招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  angang: {
+    primaryJobUrl: "https://zhaopin.ansteel.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留鞍钢集团官方主域名下招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  "ja-solar": {
+    primaryJobUrl: "https://hr.jasolar.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留晶澳科技官方主域名下招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  "canadian-solar": {
+    primaryJobUrl: "https://recruit.cnsolare.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: false,
+    primaryJobUrlNote: "已于 2026-04-06 标记为待复核，当前阿特斯招聘子域不可稳定访问。"
+  },
+  "flat-glass": {
+    primaryJobUrl: "https://flatgroup.com.cn/recruit",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为福莱特官网人才招募页，替换原不稳定招聘子域名。"
+  },
+  "luckin-coffee": {
+    primaryJobUrl: "https://www.lkcoffee.com/about",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的瑞幸咖啡官网 About 页面更新，并直连确认页面可访问。"
+  },
+  "focus-media": {
+    primaryJobUrl: "https://join.focusmedia.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: false,
+    primaryJobUrlNote: "已于 2026-04-06 标记为待复核，当前分众传媒招聘子域不可稳定访问。"
+  },
+  hla: {
+    primaryJobUrl: "https://www.hotjob.cn/wt/HLA/web/index",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为海澜之家 Hotjob 招聘页，替换原不可稳定访问招聘子域。"
+  },
+  "dongfang-caifu": {
+    primaryJobUrl: "https://zhaopin.eastmoney.com/social-recruitment/eastmoney/57970/#/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的东方财富精确招聘页更新并标记为已核验。"
+  },
+  "pop-mart": {
+    primaryJobUrl: "https://popmart.zhiye.com/campus/jobs",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为泡泡玛特 zhiye 校招页，替换原不可稳定访问招聘子域。"
+  },
+  heytea: {
+    primaryJobUrl: "https://www.heytalents.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留喜茶官方招聘域名作为正式招聘入口并标记为已核验。"
+  },
+  haidilao: {
+    primaryJobUrl: "https://haidilao.jobs.feishu.cn/070469/position/7342775344515369226/detail",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为海底捞 Feishu 招聘职位页，替换原不可访问招聘子域。"
+  },
+  bestore: {
+    primaryJobUrl: "https://lppz.zhiye.com/campus/jobs",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的良品铺子 zhiye 校招页更新。"
+  },
+  "muyuan-foods": {
+    primaryJobUrl: "https://www.muyuanfoods.com/#/recruitConsulting",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为牧原股份官网招聘咨询锚点页。"
+  },
+  ronbay: {
+    primaryJobUrl: "https://ronbay.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的容百 zhiye 招聘入口更新并标记为已核验。"
+  },
+  deye: {
+    primaryJobUrl: "https://deye.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的德业 zhiye 招聘入口更新并标记为已核验。"
+  },
+  "wens-foodstuff": {
+    primaryJobUrl: "https://career.wens.com.cn/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留温氏股份官方主域名下招聘子站作为正式招聘入口并标记为已核验。"
+  },
+  fotile: {
+    primaryJobUrl: "https://fotile.zhiye.com/about#i1",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 直连确认方太招聘站关于我们页面可访问，并替换原官网 Career 页。"
+  },
+  "dingdong-maicai": {
+    primaryJobUrl: "https://talent.100.me/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 保留叮咚买菜官方招聘域名作为正式招聘入口并标记为已核验。"
+  },
+  "hema-fresh": {
+    primaryJobUrl: "https://m.zhaopin.com/company/CZ486152530.htm",
+    primaryJobUrlType: "third_party_job_board",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为盒马可访问的智联招聘公司页，原官方招聘域名当前不可稳定访问。"
+  },
+  "wh-group": {
+    primaryJobUrl: "https://www.shuanghui.net/page-concept.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 根据双汇官网“诚聘英才/大学生招聘”栏目页面交叉确认并替换原 404 招聘链接。"
+  },
+  "three-squirrels": {
+    primaryJobUrl: "https://www.3songshu.com/sjob/xjob.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的三只松鼠官网招聘页更新并标记为已核验。"
+  },
+  sanhua: {
+    primaryJobUrl: "https://www.zjshc.com/about/join.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的三花智控官网加入我们页面更新并标记为已核验。"
+  },
+  "risen-energy": {
+    primaryJobUrl: "https://risen.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的东方日升招聘页更新并标记为已核验。"
+  },
+  "zoomlion-extra": {
+    primaryJobUrl: "http://www.zoomlion-access.com/join/join-us.htm",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的中联重科加入我们页面更新并标记为已核验。"
   }
 };
 
 let updated = 0;
 
 for (const company of data) {
+  if (company.primaryJobUrlNote === bulkAutoVerifyNote) {
+    company.primaryJobUrlVerified = false;
+    company.primaryJobUrlVerifiedAt = capturedAt;
+    company.primaryJobUrlNote = revertedAutoVerifyNote;
+  }
+
   const patch = updates[company.id];
-  if (!patch) continue;
-  Object.assign(company, patch, { primaryJobUrlVerifiedAt: capturedAt });
+  const shouldBulkVerify = bulkVerifiedIds.has(company.id);
+  if (!patch && !shouldBulkVerify) continue;
+  Object.assign(
+    company,
+    shouldBulkVerify
+      ? {
+          primaryJobUrlVerified: true,
+          primaryJobUrlVerifiedAt: capturedAt,
+          primaryJobUrlNote: "已于 2026-04-06 保留官方 careers 主站作为稳定招聘入口并标记为已核验。"
+        }
+      : {},
+    patch ?? {},
+    { primaryJobUrlVerifiedAt: capturedAt }
+  );
   const primaryEvidence = company.evidence?.find((item) => item.isPrimary);
   if (primaryEvidence) {
     primaryEvidence.url = company.primaryJobUrl;

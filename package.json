@@ -8,7 +8,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "db:seed": "node scripts/seed-sqlite.mjs"
+    "db:seed": "node scripts/seed-sqlite.mjs",
+    "links:check": "zsh scripts/check-verified-links.sh"
   },
   "dependencies": {
     "next": "^15.3.0",
