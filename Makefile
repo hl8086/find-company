@@ -1,7 +1,7 @@
 APP_NAME := find-job
 PORT ?= 3000
 
-.PHONY: install dev build start db-seed sync-static preview-static docker-build docker-run
+.PHONY: install dev build start db-seed sync-static preview-static docker-build docker-build-amd64 docker-run
 
 install:
 	npm install
@@ -26,6 +26,9 @@ preview-static: sync-static
 
 docker-build:
 	docker build -t $(APP_NAME):latest .
+
+docker-build-amd64:
+	docker buildx build --platform linux/amd64 -t $(APP_NAME):amd64 --load .
 
 docker-run:
 	docker run --rm -p $(PORT):3000 $(APP_NAME):latest

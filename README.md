@@ -158,6 +158,24 @@ docker build -t find-job:latest .
 make docker-build
 ```
 
+如果你当前是在 Mac，想打一个可在 `x86/amd64` 环境运行的镜像，使用 `buildx`：
+
+```bash
+docker buildx build --platform linux/amd64 -t find-job:amd64 --load .
+```
+
+或者：
+
+```bash
+make docker-build-amd64
+```
+
+说明：
+
+- `--platform linux/amd64` 会产出 `x86_64` 可用镜像
+- `--load` 会把镜像加载到你本机 Docker，本地可以直接 `docker run`
+- 如果你是要直接推到镜像仓库，把 `--load` 改成 `--push`
+
 ### 2. 启动容器
 
 ```bash
@@ -195,6 +213,7 @@ make db-seed
 make sync-static
 make preview-static
 make docker-build
+make docker-build-amd64
 make docker-run
 ```
 

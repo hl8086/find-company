@@ -17197,7 +17197,7 @@
     "campusHiringLastSeenAt": "2026-04-05",
     "primaryJobUrlVerified": true,
     "primaryJobUrlVerifiedAt": "2026-04-06",
-    "primaryJobUrlNote": "已于 2026-04-06 保留官方 careers 主站作为稳定招聘入口并标记为已核验。",
+    "primaryJobUrlNote": "已于 2026-04-06 按提供的优衣库 zhiye 招聘入口更新。",
     "notes": "新增批量导入记录，后续建议补官方中国员工口径与更近的校招证据。",
     "tags": [
       "官方招聘",
@@ -17209,7 +17209,7 @@
         "id": "uniqlo-china-primary",
         "sourceType": "official_careers",
         "title": "优衣库中国招聘官网",
-        "url": "https://www.fastretailing.com/employment/zh/uniqlo/china/",
+        "url": "https://uniqlo.zhiye.com/",
         "publisher": "优衣库中国招聘入口",
         "publishedAt": "2026-04-05",
         "capturedAt": "2026-04-05",
@@ -17244,7 +17244,7 @@
     "name": "优衣库中国",
     "nameEn": "UNIQLO China",
     "industry": "零售",
-    "primaryJobUrl": "https://www.fastretailing.com/employment/zh/uniqlo/china/",
+    "primaryJobUrl": "https://uniqlo.zhiye.com/",
     "primaryJobUrlType": "official_careers"
   },
   {
@@ -17255,7 +17255,7 @@
     "campusHiringLastSeenAt": "2026-04-05",
     "primaryJobUrlVerified": true,
     "primaryJobUrlVerifiedAt": "2026-04-06",
-    "primaryJobUrlNote": "已于 2026-04-06 保留官方 careers 主站作为稳定招聘入口并标记为已核验。",
+    "primaryJobUrlNote": "已于 2026-04-06 改为可访问的无印良品中国智联招聘公司页，替换原不可访问 careers 站。",
     "notes": "新增批量导入记录，后续建议补官方中国员工口径与更近的校招证据。",
     "tags": [
       "官方招聘",
@@ -17265,9 +17265,9 @@
     "evidence": [
       {
         "id": "muji-china-primary",
-        "sourceType": "official_careers",
+        "sourceType": "third_party_job_board",
         "title": "无印良品中国招聘官网",
-        "url": "https://career.muji.com/",
+        "url": "https://www.zhaopin.com/companydetail/CZ152823610.htm",
         "publisher": "无印良品中国招聘入口",
         "publishedAt": "2026-04-05",
         "capturedAt": "2026-04-05",
@@ -17302,8 +17302,8 @@
     "name": "无印良品中国",
     "nameEn": "MUJI China",
     "industry": "零售",
-    "primaryJobUrl": "https://career.muji.com/",
-    "primaryJobUrlType": "official_careers"
+    "primaryJobUrl": "https://www.zhaopin.com/companydetail/CZ152823610.htm",
+    "primaryJobUrlType": "third_party_job_board"
   },
   {
     "aliases": [],
@@ -20797,7 +20797,7 @@
     "campusHiringLastSeenAt": "2026-04-05",
     "primaryJobUrlVerified": true,
     "primaryJobUrlVerifiedAt": "2026-04-06",
-    "primaryJobUrlNote": "已于 2026-04-06 保留喜茶官方招聘域名作为正式招聘入口并标记为已核验。",
+    "primaryJobUrlNote": "已于 2026-04-06 改为可访问的喜茶智联招聘公司页，替换原不可稳定访问招聘站。",
     "notes": "新增批量导入记录，后续建议补官方中国员工口径与更近的校招证据。",
     "tags": [
       "官方招聘",
@@ -20807,9 +20807,9 @@
     "evidence": [
       {
         "id": "heytea-primary",
-        "sourceType": "official_careers",
+        "sourceType": "third_party_job_board",
         "title": "喜茶招聘官网",
-        "url": "https://www.heytalents.com/",
+        "url": "https://www.zhaopin.com/companydetail/CZ401232980.htm",
         "publisher": "喜茶招聘入口",
         "publishedAt": "2026-04-05",
         "capturedAt": "2026-04-05",
@@ -20844,8 +20844,8 @@
     "name": "喜茶",
     "nameEn": "Heytea",
     "industry": "连锁消费",
-    "primaryJobUrl": "https://www.heytalents.com/",
-    "primaryJobUrlType": "official_careers"
+    "primaryJobUrl": "https://www.zhaopin.com/companydetail/CZ401232980.htm",
+    "primaryJobUrlType": "third_party_job_board"
   },
   {
     "aliases": [],
@@ -24335,7 +24335,7 @@
     "campusHiringLastSeenAt": "2026-04-05",
     "primaryJobUrlVerified": true,
     "primaryJobUrlVerifiedAt": "2026-04-06",
-    "primaryJobUrlNote": "已于 2026-04-06 根据京东物流官方招聘站页面交叉确认并替换原失稳招聘域名。",
+    "primaryJobUrlNote": "已于 2026-04-06 改为可访问的京东招聘主站，页面内含京东物流板块与职位。",
     "notes": "新增批量导入记录，后续建议补官方中国员工口径与更近的校招证据。",
     "tags": [
       "官方招聘",
@@ -24347,7 +24347,7 @@
         "id": "jd-logistics-primary",
         "sourceType": "official_careers",
         "title": "京东物流招聘官网",
-        "url": "https://jenchina.jdwl.com/",
+        "url": "https://zhaopin.jd.com/",
         "publisher": "京东物流招聘入口",
         "publishedAt": "2026-04-05",
         "capturedAt": "2026-04-05",
@@ -24382,7 +24382,7 @@
     "name": "京东物流",
     "nameEn": "JD Logistics",
     "industry": "物流",
-    "primaryJobUrl": "https://jenchina.jdwl.com/",
+    "primaryJobUrl": "https://zhaopin.jd.com/",
     "primaryJobUrlType": "official_careers"
   },
   {
@@ -24451,7 +24451,7 @@
     "campusHiringLastSeenAt": "2026-04-05",
     "primaryJobUrlVerified": true,
     "primaryJobUrlVerifiedAt": "2026-04-06",
-    "primaryJobUrlNote": "已于 2026-04-06 保留叮咚买菜官方招聘域名作为正式招聘入口并标记为已核验。",
+    "primaryJobUrlNote": "已于 2026-04-06 改为可访问的叮咚买菜智联招聘公司页，替换原不可稳定访问招聘站。",
     "notes": "新增批量导入记录，后续建议补官方中国员工口径与更近的校招证据。",
     "tags": [
       "官方招聘",
@@ -24461,9 +24461,9 @@
     "evidence": [
       {
         "id": "dingdong-maicai-primary",
-        "sourceType": "official_careers",
+        "sourceType": "third_party_job_board",
         "title": "叮咚买菜招聘官网",
-        "url": "https://talent.100.me/",
+        "url": "https://www.zhaopin.com/companydetail/CZ646679620.htm",
         "publisher": "叮咚买菜招聘入口",
         "publishedAt": "2026-04-05",
         "capturedAt": "2026-04-05",
@@ -24498,8 +24498,8 @@
     "name": "叮咚买菜",
     "nameEn": "Dingdong",
     "industry": "零售",
-    "primaryJobUrl": "https://talent.100.me/",
-    "primaryJobUrlType": "official_careers"
+    "primaryJobUrl": "https://www.zhaopin.com/companydetail/CZ646679620.htm",
+    "primaryJobUrlType": "third_party_job_board"
   },
   {
     "aliases": [],

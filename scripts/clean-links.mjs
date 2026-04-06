@@ -44,8 +44,6 @@ const bulkVerifiedIds = new Set([
   "ikea-china",
   "hm-china",
   "inditex-china",
-  "uniqlo-china",
-  "muji-china",
   "lululemon-china",
   "apple-china",
   "google-china",
@@ -192,6 +190,18 @@ const updates = {
     primaryJobUrlType: "official_campus",
     primaryJobUrlVerified: true,
     primaryJobUrlNote: "已改为小红书校招入口，参考 2026-03-23 高校就业网春招公告。"
+  },
+  "uniqlo-china": {
+    primaryJobUrl: "https://uniqlo.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 按提供的优衣库 zhiye 招聘入口更新。"
+  },
+  "muji-china": {
+    primaryJobUrl: "https://www.zhaopin.com/companydetail/CZ152823610.htm",
+    primaryJobUrlType: "third_party_job_board",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已于 2026-04-06 改为可访问的无印良品中国智联招聘公司页，替换原不可访问 careers 站。"
   },
   oppo: {
     primaryJobUrl: "https://careers.oppo.com/university/oppo/campus/",
@@ -1386,10 +1396,10 @@ const updates = {
     primaryJobUrlNote: "已于 2026-04-06 根据汽车之家官方招聘站交叉确认并替换原失稳招聘域名。"
   },
   "jd-logistics": {
-    primaryJobUrl: "https://jenchina.jdwl.com/",
+    primaryJobUrl: "https://zhaopin.jd.com/",
     primaryJobUrlType: "official_careers",
     primaryJobUrlVerified: true,
-    primaryJobUrlNote: "已于 2026-04-06 根据京东物流官方招聘站页面交叉确认并替换原失稳招聘域名。"
+    primaryJobUrlNote: "已于 2026-04-06 改为可访问的京东招聘主站，页面内含京东物流板块与职位。"
   },
   "digital-china": {
     primaryJobUrl: "https://digitalchina.zhiye.com/campus/jobs",
@@ -1662,10 +1672,10 @@ const updates = {
     primaryJobUrlNote: "已于 2026-04-06 改为泡泡玛特 zhiye 校招页，替换原不可稳定访问招聘子域。"
   },
   heytea: {
-    primaryJobUrl: "https://www.heytalents.com/",
-    primaryJobUrlType: "official_careers",
+    primaryJobUrl: "https://www.zhaopin.com/companydetail/CZ401232980.htm",
+    primaryJobUrlType: "third_party_job_board",
     primaryJobUrlVerified: true,
-    primaryJobUrlNote: "已于 2026-04-06 保留喜茶官方招聘域名作为正式招聘入口并标记为已核验。"
+    primaryJobUrlNote: "已于 2026-04-06 改为可访问的喜茶智联招聘公司页，替换原不可稳定访问招聘站。"
   },
   haidilao: {
     primaryJobUrl: "https://haidilao.jobs.feishu.cn/070469/position/7342775344515369226/detail",
@@ -1710,10 +1720,10 @@ const updates = {
     primaryJobUrlNote: "已于 2026-04-06 直连确认方太招聘站关于我们页面可访问，并替换原官网 Career 页。"
   },
   "dingdong-maicai": {
-    primaryJobUrl: "https://talent.100.me/",
-    primaryJobUrlType: "official_careers",
+    primaryJobUrl: "https://www.zhaopin.com/companydetail/CZ646679620.htm",
+    primaryJobUrlType: "third_party_job_board",
     primaryJobUrlVerified: true,
-    primaryJobUrlNote: "已于 2026-04-06 保留叮咚买菜官方招聘域名作为正式招聘入口并标记为已核验。"
+    primaryJobUrlNote: "已于 2026-04-06 改为可访问的叮咚买菜智联招聘公司页，替换原不可稳定访问招聘站。"
   },
   "hema-fresh": {
     primaryJobUrl: "https://m.zhaopin.com/company/CZ486152530.htm",
