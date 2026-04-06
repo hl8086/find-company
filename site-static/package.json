@@ -1,0 +1,8 @@
+{
+  "name": "find-job-site-static",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "sync-data": "node ./scripts/sync-data.mjs"
+  }
+}

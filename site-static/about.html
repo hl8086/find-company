@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>数据口径</title>
+    <meta name="description" content="校招公司池的数据口径和筛选规则说明。"/>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell page-shell-detail">
+      <main class="detail-page">
+        <div class="detail-topbar">
+          <a class="ghost-button" href="./">返回列表</a>
+        </div>
+
+        <section class="detail-hero">
+          <p class="eyebrow">Methodology</p>
+          <h1>数据口径</h1>
+          <p>
+            当前版本优先验证三个问题：这家公司是否在中国有校招信号、是否能直达招聘信息页面、是否能找到可信的员工规模口径。
+          </p>
+        </section>
+
+        <section class="detail-grid">
+          <article class="panel detail-panel">
+            <h2>纳入规则</h2>
+            <dl class="info-list">
+              <div>
+                <dt>校招判断</dt>
+                <dd>优先采用官方校招页和官方招聘页，其次参考高校就业网和可信第三方招聘页。</dd>
+              </div>
+              <div>
+                <dt>员工规模</dt>
+                <dd>优先采用中国官网、年报、ESG 或中国业务页中的员工口径，其次保留全球口径。</dd>
+              </div>
+              <div>
+                <dt>时间窗</dt>
+                <dd>默认使用最近 12 个月的校招信号，避免将历史页面直接当成当前校招。</dd>
+              </div>
+              <div>
+                <dt>链接优先级</dt>
+                <dd>优先直达官方校招页，其次官方招聘页，再次是高校就业网或第三方招聘页。</dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="panel detail-panel">
+            <h2>页面说明</h2>
+            <dl class="info-list">
+              <div>
+                <dt>筛选方式</dt>
+                <dd>企业类型、行业分组、工作省份、链接状态可以组合使用，关键词支持模糊匹配。</dd>
+              </div>
+              <div>
+                <dt>详情页</dt>
+                <dd>单家公司详情会展示基础信息、备注和证据列表，便于复核来源。</dd>
+              </div>
+              <div>
+                <dt>部署方式</dt>
+                <dd>本站为纯静态页面，适合直接托管到 GitHub Pages。</dd>
+              </div>
+            </dl>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+  </html>

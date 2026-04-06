@@ -1,0 +1,11 @@
+.next
+node_modules
+.DS_Store
+data/companies.sqlite
+data/companies.sqlite-shm
+data/companies.sqlite-wal
+design.md
+plan.md
+site-static/.next
+site-static/node_modules
+site-static/out
