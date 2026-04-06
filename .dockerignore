@@ -1,0 +1,9 @@
+.git
+.github
+.next
+node_modules
+site-static/node_modules
+site-static/data
+.DS_Store
+design.md
+plan.md

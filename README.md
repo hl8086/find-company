@@ -55,6 +55,12 @@ find-job/
 node site-static/scripts/sync-data.mjs
 ```
 
+或者：
+
+```bash
+make sync-static
+```
+
 ## 本地开发
 
 ### 1. 根目录应用
@@ -65,16 +71,34 @@ node site-static/scripts/sync-data.mjs
 npm install
 ```
 
+或者：
+
+```bash
+make install
+```
+
 启动开发环境：
 
 ```bash
 npm run dev
 ```
 
+或者：
+
+```bash
+make dev
+```
+
 构建：
 
 ```bash
 npm run build
+```
+
+或者：
+
+```bash
+make build
 ```
 
 说明：
@@ -90,16 +114,88 @@ npm run build
 node site-static/scripts/sync-data.mjs
 ```
 
+或者：
+
+```bash
+make sync-static
+```
+
 再用任意静态服务器预览：
 
 ```bash
 python3 -m http.server 4173 -d site-static
 ```
 
+或者：
+
+```bash
+make preview-static
+```
+
 访问：
 
 ```text
 http://127.0.0.1:4173
+```
+
+## Docker 部署
+
+仓库已经包含：
+
+- `Dockerfile`
+- `.dockerignore`
+- `Makefile`
+
+### 1. 构建镜像
+
+```bash
+docker build -t find-job:latest .
+```
+
+或者：
+
+```bash
+make docker-build
+```
+
+### 2. 启动容器
+
+```bash
+docker run --rm -p 3000:3000 find-job:latest
+```
+
+或者：
+
+```bash
+make docker-run
+```
+
+访问：
+
+```text
+http://127.0.0.1:3000
+```
+
+说明：
+
+- 容器默认运行根目录的 `Next.js + SQLite` 应用
+- 构建阶段会执行 `npm run build`
+- 根目录应用的 `prebuild` 会自动 seed SQLite 数据
+
+## Make 命令
+
+常用命令：
+
+```bash
+make install
+make dev
+make build
+make start
+make db-seed
+make sync-static
+make preview-static
+make docker-build
+make docker-run
 ```
 
 ## GitHub Pages 发布
@@ -118,6 +214,13 @@ http://127.0.0.1:4173
 GitHub 仓库中需要设置：
 
 - `Settings -> Pages -> Source -> GitHub Actions`
+
+部署步骤：
+
+1. 更新根目录的 `data/companies.json`
+2. 执行 `node site-static/scripts/sync-data.mjs`
+3. 提交并推送到 `main`
+4. 等待 GitHub Actions 自动发布 `site-static/`
 
 更详细的说明见：
 
