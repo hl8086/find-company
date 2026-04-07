@@ -70,6 +70,241 @@ const bulkVerifiedIds = new Set([
 
 const revertedAutoVerifyNote = "该链接曾按域名规则暂记为已核验，现已回退为待复核，需要逐条确认。";
 const bulkAutoVerifyNote = "已于 2026-04-06 保留公司命名的官方招聘子域或 ATS 入口并标记为已核验。";
+const verifiedAddedAt = "2026-04-07";
+const verifiedAddedIds = new Set([
+  "360-security",
+  "sangfor",
+  "qi-anxin",
+  "venus-tech",
+  "nsfocus",
+  "dbappsecurity",
+  "topsec",
+  "thundersoft",
+  "hundsun",
+  "yusys",
+  "beyondsoft",
+  "isoftstone",
+  "dcits",
+  "longshine-group",
+  "trs",
+  "digital-zhengtong",
+  "new-point",
+  "faraday-tech-china",
+  "giant-network",
+  "kunlun-tech",
+  "youzu",
+  "kingnet",
+  "cmge",
+  "igg-china",
+  "h3c",
+  "fiberhome",
+  "unisoc",
+  "verisilicon",
+  "montage",
+  "rockchip",
+  "allwinner",
+  "espressif",
+  "maxscend",
+  "smartsens",
+  "amec",
+  "naura",
+  "hwatsing",
+  "chipsea",
+  "sgmicro",
+  "supcon",
+  "hollysys",
+  "efort",
+  "invt",
+  "uniview",
+  "roborock",
+  "ecovacs",
+  "dreame",
+  "narwal",
+  "aux-group",
+  "galanz",
+  "vatti",
+  "vanward",
+  "joyoung",
+  "semir",
+  "youngor",
+  "metersbonwe",
+  "aokang",
+  "jiumaojiu",
+  "laoxiangji",
+  "guangzhou-restaurant",
+  "quanjude",
+  "juewei-food",
+  "zhouheiya",
+  "anjoy-food",
+  "sanquan-food",
+  "synear-food",
+  "toly-bread",
+  "sanyuan-food",
+  "fuling-zhacai",
+  "moutai",
+  "wuliangye",
+  "yanghe",
+  "shanxi-fenjiu",
+  "gujing-gongjiu",
+  "jinshiyuan",
+  "yanjing-beer",
+  "tsingtao-beer",
+  "yonghui",
+  "better-life",
+  "dashang",
+  "wangfujing",
+  "easyhome",
+  "red-star-macalline",
+  "proya",
+  "shanghai-jahwa",
+  "botanee",
+  "marubi",
+  "yadea",
+  "niu-tech",
+  "changan-auto",
+  "baic-group",
+  "foton-motor",
+  "jac-motors",
+  "yutong-bus",
+  "faw-jiefang",
+  "liugong",
+  "lonking",
+  "shantui",
+  "zhejiang-dingli",
+  "sdlg",
+  "wencan",
+  "yapp-auto",
+  "guoxuan-high-tech",
+  "svolt-energy",
+  "farasis",
+  "envision-aesc",
+  "sunresin",
+  "wolong-electric",
+  "pinggao-electric",
+  "sieyuan-electric",
+  "china-xd",
+  "dongfang-electric",
+  "harbin-electric",
+  "hengli-petrochemical",
+  "rongsheng-petrochemical",
+  "satellite-chemical",
+  "hualu-hengsheng",
+  "conch-cement",
+  "huaxin-cement",
+  "bbmg",
+  "jidong-cement",
+  "china-jushi",
+  "monalisa",
+  "dongpeng-holdings",
+  "salt-lake",
+  "zijin-mining",
+  "cmoc",
+  "chalco",
+  "jiangxi-copper",
+  "western-mining",
+  "chifeng-gold",
+  "northern-rare-earth",
+  "xiamen-tungsten",
+  "fosun-pharma",
+  "lepu-medical",
+  "yuyue-medical",
+  "weigao",
+  "intco-medical",
+  "wondfo",
+  "autobio",
+  "snibe",
+  "dian-diagnostics",
+  "asymchem",
+  "porton",
+  "tasly",
+  "sph",
+  "tongrentang",
+  "buchang-pharma",
+  "walvax",
+  "cansino",
+  "simcere",
+  "hansoh",
+  "three-sbio",
+  "akeso",
+  "kelun-biotech",
+  "jinyu-bio",
+  "citic-bank",
+  "qingdao-bank",
+  "zhengzhou-bank",
+  "xian-bank",
+  "cqrcb",
+  "ql-bank",
+  "bjrcb",
+  "guotai-junan",
+  "haitong-securities",
+  "china-galaxy-securities",
+  "peacebird",
+  "china-lesso",
+  "dongxing-securities",
+  "soochow-securities",
+  "caitong-securities",
+  "founder-securities",
+  "guolian-securities",
+  "guojin-securities",
+  "zhongyuan-securities",
+  "caida-securities",
+  "northeast-securities",
+  "shanxi-securities",
+  "china-re",
+  "shougang-group",
+  "beijing-enterprises",
+  "bright-food",
+  "yuexiu-group",
+  "jinjiang-international",
+  "shanghai-construction",
+  "shanghai-tunnel",
+  "shanghai-airport",
+  "ningbo-port",
+  "guangzhou-port",
+  "guangzhou-metro",
+  "shenzhen-metro",
+  "yutong-group",
+  "sdic-capital",
+  "tongren-health",
+  "jinfeng-technology",
+  "sany-heavy-energy",
+  "daqin-railway",
+  "jinlongyu",
+  "cofco",
+  "sdic",
+  "powerchina",
+  "sinopharm",
+  "china-post",
+  "chdt-group",
+  "chinacoal-group",
+  "fosun-group",
+  "wanxiang-group",
+  "best-inc-china",
+  "dawning",
+  "hygon",
+  "chipon",
+  "nova-tech",
+  "montnets",
+  "sino-its",
+  "meiya-pico",
+  "thunisoft",
+  "yealink",
+  "goke",
+  "mingyang-smart-energy",
+  "maxwell-tech",
+  "dier-laser",
+  "hangke",
+  "ninebot-china",
+  "opple-lighting",
+  "layin",
+  "fudan-micro",
+  "kant-bio",
+  "walvax-biotech",
+  "daan-gene",
+  "meinian-health",
+  "jianfan-bio"
+]);
+const verifiedAddedNote = "已于 2026-04-07 直连确认新增公司入口返回 200。";
 
 const updates = {
   tencent: {
@@ -1119,10 +1354,124 @@ const updates = {
     primaryJobUrlNote: "已根据中国大唐集团官方人力资源市场平台交叉确认并标记为已核验。"
   },
   "china-coal": {
-    primaryJobUrl: "https://www.chinacoal.com/col/col37/art/2026/art_37366bcf25124b5395fe899f71737b5f.html",
+    primaryJobUrl: "https://zhaopin.chinacoal.com/home",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将中国中煤招聘主页标记为已核验。"
+  },
+  "guangzhou-metro": {
+    primaryJobUrl: "https://gzmetro.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将广州地铁招聘页标记为已核验。"
+  },
+  "zhongyuan-securities": {
+    primaryJobUrl: "https://www.ccnew.com/main/joinus/xyzp/index.shtml",
     primaryJobUrlType: "official_campus",
     primaryJobUrlVerified: true,
-    primaryJobUrlNote: "已根据中国中煤 2026 届高校毕业生春季招聘公告交叉确认并标记为已核验。"
+    primaryJobUrlNote: "已按人工复核结果将中原证券校园招聘页标记为已核验。"
+  },
+  "citic-group": {
+    primaryJobUrl: "https://job.citic.com/recruit#/index",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将中信集团招聘页标记为已核验。"
+  },
+  "citic-bank": {
+    primaryJobUrl: "https://job.citicbank.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将中信银行招聘页标记为已核验。"
+  },
+  "dongpeng-holdings": {
+    primaryJobUrl: "https://dongpeng.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将东鹏控股招聘页标记为已核验。"
+  },
+  "jidong-cement": {
+    primaryJobUrl: "https://wecruit.hotjob.cn/SU62d139692f9d2470a6e6e052/pb/index.html#/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将冀东水泥招聘页标记为已核验。"
+  },
+  quanjude: {
+    primaryJobUrl: "https://www.quanjude.com.cn/html/ourteams/hr/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将全聚德招聘页标记为已核验。"
+  },
+  "huaxin-cement": {
+    primaryJobUrl: "https://www.huaxincem.com/rencaizhaopin/shehuizhaopin/zhaopingonggao.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将华新水泥招聘页标记为已核验。"
+  },
+  "dongfang-electric": {
+    primaryJobUrl: "https://www.dongfang.com/zxns/xyzp.htm",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将东方电气校园招聘页标记为已核验。"
+  },
+  naura: {
+    primaryJobUrl: "https://career.naura.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将北方华创招聘页标记为已核验。"
+  },
+  dcits: {
+    primaryJobUrl: "https://www.dhcc.com.cn/job.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将东华软件招聘页标记为已核验。"
+  },
+  "soochow-securities": {
+    primaryJobUrl: "https://dwzq.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将东吴证券招聘页标记为已核验。"
+  },
+  "dongxing-securities": {
+    primaryJobUrl: "https://dxzq.zhiye.com/campus",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将东兴证券校园招聘页标记为已核验。"
+  },
+  "northeast-securities": {
+    primaryJobUrl: "https://nesc.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将东北证券招聘页标记为已核验。"
+  },
+  thunisoft: {
+    primaryJobUrl: "https://www.thunisoft.cn/col9/index",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将华宇软件招聘页标记为已核验。"
+  },
+  hwatsing: {
+    primaryJobUrl: "https://www.hwatsing.com/joinus_school.html",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将华海清科校园招聘页标记为已核验。"
+  },
+  vatti: {
+    primaryJobUrl: "https://www.vatti.com.cn/about/campus_recruitment",
+    primaryJobUrlType: "official_campus",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将华帝校园招聘页标记为已核验。"
+  },
+  "beijing-enterprises": {
+    primaryJobUrl: "https://www.begcl.com/rcgz/jtzp/index.html",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将北控集团招聘页标记为已核验。"
+  },
+  "baic-group": {
+    primaryJobUrl: "https://baicgroup.zhiye.com/",
+    primaryJobUrlType: "official_careers",
+    primaryJobUrlVerified: true,
+    primaryJobUrlNote: "已按人工复核结果将北汽集团招聘页标记为已核验。"
   },
   cetc: {
     primaryJobUrl: "https://www.cetc.com.cn/zgdk/1593037/zpjgg/index.html",
@@ -1774,7 +2123,8 @@ for (const company of data) {
 
   const patch = updates[company.id];
   const shouldBulkVerify = bulkVerifiedIds.has(company.id);
-  if (!patch && !shouldBulkVerify) continue;
+  const shouldVerifyAdded = verifiedAddedIds.has(company.id);
+  if (!patch && !shouldBulkVerify && !shouldVerifyAdded) continue;
   Object.assign(
     company,
     shouldBulkVerify
@@ -1784,9 +2134,19 @@ for (const company of data) {
           primaryJobUrlNote: "已于 2026-04-06 保留官方 careers 主站作为稳定招聘入口并标记为已核验。"
         }
       : {},
+    shouldVerifyAdded
+      ? {
+          primaryJobUrlVerified: true,
+          primaryJobUrlVerifiedAt: verifiedAddedAt,
+          primaryJobUrlNote: verifiedAddedNote
+        }
+      : {},
     patch ?? {},
-    { primaryJobUrlVerifiedAt: capturedAt }
+    { primaryJobUrlVerifiedAt: patch?.primaryJobUrlVerifiedAt ?? (shouldVerifyAdded ? verifiedAddedAt : capturedAt) }
   );
+  if (shouldVerifyAdded && Array.isArray(company.tags)) {
+    company.tags = company.tags.map((tag) => (tag === "待复核" ? "已核验" : tag));
+  }
   const primaryEvidence = company.evidence?.find((item) => item.isPrimary);
   if (primaryEvidence) {
     primaryEvidence.url = company.primaryJobUrl;
