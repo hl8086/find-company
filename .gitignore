@@ -6,6 +6,7 @@ data/companies.sqlite-shm
 data/companies.sqlite-wal
 design.md
 plan.md
+plan2.md
 site-static/.next
 site-static/node_modules
 site-static/out

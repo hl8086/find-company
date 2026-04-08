@@ -26,7 +26,7 @@ GitHub Pages 只能托管静态文件，因此发布版需要避免：
 ## 现在已经落地的目录
 
 ```text
-find-job/
+find-company/
 ├─ data/
 │  └─ companies.json
 ├─ docs/
@@ -158,10 +158,10 @@ git push origin main
 https://<github-username>.github.io/<repo-name>/
 ```
 
-如果仓库名是 `find-job`，则一般会是：
+如果仓库名是 `find-company`，则一般会是：
 
 ```text
-https://<github-username>.github.io/find-job/
+https://<github-username>.github.io/find-company/
 ```
 
 ## 发布前检查

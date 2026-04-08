@@ -1,0 +1,186 @@
+[
+  {
+    "id": "huawei-campus-2026-04-07T15:20:22.394Z",
+    "sourceId": "huawei-campus",
+    "companyId": "huawei",
+    "startedAt": "2026-04-07T15:20:22.235Z",
+    "completedAt": "2026-04-07T15:20:22.394Z",
+    "status": "success",
+    "resolvedUrl": "https://career.huawei.com/reccampportal/portal5/campus-recruitment.html",
+    "jobsFound": 1
+  },
+  {
+    "id": "tencent-campus-2026-04-07T15:20:22.463Z",
+    "sourceId": "tencent-campus",
+    "companyId": "tencent",
+    "startedAt": "2026-04-07T15:20:22.396Z",
+    "completedAt": "2026-04-07T15:20:22.463Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://join.qq.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "alibaba-campus-2026-04-07T15:20:23.743Z",
+    "sourceId": "alibaba-campus",
+    "companyId": "alibaba",
+    "startedAt": "2026-04-07T15:20:22.463Z",
+    "completedAt": "2026-04-07T15:20:23.743Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://talent.alibaba.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "byd-campus-2026-04-07T15:20:25.480Z",
+    "sourceId": "byd-campus",
+    "companyId": "byd",
+    "startedAt": "2026-04-07T15:20:23.743Z",
+    "completedAt": "2026-04-07T15:20:25.480Z",
+    "status": "error",
+    "resolvedUrl": "https://zhaopin.byd.com/social/campus",
+    "jobsFound": 0,
+    "errorMessage": "fetch failed"
+  },
+  {
+    "id": "huawei-campus-2026-04-07T15:21:20.018Z",
+    "sourceId": "huawei-campus",
+    "companyId": "huawei",
+    "startedAt": "2026-04-07T15:21:19.793Z",
+    "completedAt": "2026-04-07T15:21:20.018Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://career.huawei.com/reccampportal/portal5/campus-recruitment.html",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "tencent-campus-2026-04-07T15:21:20.087Z",
+    "sourceId": "tencent-campus",
+    "companyId": "tencent",
+    "startedAt": "2026-04-07T15:21:20.022Z",
+    "completedAt": "2026-04-07T15:21:20.087Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://join.qq.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "alibaba-campus-2026-04-07T15:21:20.507Z",
+    "sourceId": "alibaba-campus",
+    "companyId": "alibaba",
+    "startedAt": "2026-04-07T15:21:20.087Z",
+    "completedAt": "2026-04-07T15:21:20.507Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://talent.alibaba.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "byd-campus-2026-04-07T15:21:22.640Z",
+    "sourceId": "byd-campus",
+    "companyId": "byd",
+    "startedAt": "2026-04-07T15:21:20.507Z",
+    "completedAt": "2026-04-07T15:21:22.640Z",
+    "status": "error",
+    "resolvedUrl": "https://zhaopin.byd.com/social/campus",
+    "jobsFound": 0,
+    "errorMessage": "fetch failed"
+  },
+  {
+    "id": "huawei-campus-2026-04-07T15:31:14.992Z",
+    "sourceId": "huawei-campus",
+    "companyId": "huawei",
+    "startedAt": "2026-04-07T15:31:14.749Z",
+    "completedAt": "2026-04-07T15:31:14.992Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://career.huawei.com/reccampportal/portal5/campus-recruitment.html",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "tencent-campus-2026-04-07T15:31:15.051Z",
+    "sourceId": "tencent-campus",
+    "companyId": "tencent",
+    "startedAt": "2026-04-07T15:31:14.993Z",
+    "completedAt": "2026-04-07T15:31:15.051Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://join.qq.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "alibaba-campus-2026-04-07T15:31:15.455Z",
+    "sourceId": "alibaba-campus",
+    "companyId": "alibaba",
+    "startedAt": "2026-04-07T15:31:15.051Z",
+    "completedAt": "2026-04-07T15:31:15.455Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://talent.alibaba.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "byd-campus-2026-04-07T15:31:17.384Z",
+    "sourceId": "byd-campus",
+    "companyId": "byd",
+    "startedAt": "2026-04-07T15:31:15.455Z",
+    "completedAt": "2026-04-07T15:31:17.384Z",
+    "status": "error",
+    "resolvedUrl": "https://zhaopin.byd.com/social/campus",
+    "jobsFound": 0,
+    "errorMessage": "fetch failed"
+  },
+  {
+    "id": "huawei-campus-2026-04-07T15:43:46.218Z",
+    "sourceId": "huawei-campus",
+    "companyId": "huawei",
+    "startedAt": "2026-04-07T15:43:46.217Z",
+    "completedAt": "2026-04-07T15:43:46.218Z",
+    "status": "success",
+    "resolvedUrl": "https://career.huawei.com/reccampportal/portal5/campus-recruitment.html",
+    "jobsFound": 60
+  },
+  {
+    "id": "huawei-campus-2026-04-07T15:44:05.639Z",
+    "sourceId": "huawei-campus",
+    "companyId": "huawei",
+    "startedAt": "2026-04-07T15:44:05.638Z",
+    "completedAt": "2026-04-07T15:44:05.639Z",
+    "status": "success",
+    "resolvedUrl": "https://career.huawei.com/reccampportal/portal5/campus-recruitment.html",
+    "jobsFound": 60
+  },
+  {
+    "id": "tencent-campus-2026-04-07T15:44:06.758Z",
+    "sourceId": "tencent-campus",
+    "companyId": "tencent",
+    "startedAt": "2026-04-07T15:44:06.758Z",
+    "completedAt": "2026-04-07T15:44:06.758Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://join.qq.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "alibaba-campus-2026-04-07T15:44:06.824Z",
+    "sourceId": "alibaba-campus",
+    "companyId": "alibaba",
+    "startedAt": "2026-04-07T15:44:06.824Z",
+    "completedAt": "2026-04-07T15:44:06.824Z",
+    "status": "no_jobs",
+    "resolvedUrl": "https://talent.alibaba.com/",
+    "jobsFound": 0,
+    "errorMessage": "No job-like entries matched current rules."
+  },
+  {
+    "id": "byd-campus-2026-04-07T15:44:09.723Z",
+    "sourceId": "byd-campus",
+    "companyId": "byd",
+    "startedAt": "2026-04-07T15:44:07.231Z",
+    "completedAt": "2026-04-07T15:44:09.723Z",
+    "status": "error",
+    "resolvedUrl": "https://zhaopin.byd.com/social/campus",
+    "jobsFound": 0,
+    "errorMessage": "fetch failed"
+  }
+]

@@ -141,8 +141,10 @@ const PROVINCE_ALIAS_MAP = {
 };
 
 export async function loadDataset() {
-  const [companiesResponse, metaResponse] = await Promise.all([
+  const [companiesResponse, jobsResponse, sourcesResponse, metaResponse] = await Promise.all([
     fetch("./data/companies.json"),
+    fetch("./data/jobs.json"),
+    fetch("./data/crawl-sources.json"),
     fetch("./data/meta.json")
   ]);
 
@@ -150,13 +152,26 @@ export async function loadDataset() {
     throw new Error(`Failed to load companies.json: ${companiesResponse.status}`);
   }
 
+  if (!jobsResponse.ok) {
+    throw new Error(`Failed to load jobs.json: ${jobsResponse.status}`);
+  }
+
+  if (!sourcesResponse.ok) {
+    throw new Error(`Failed to load crawl-sources.json: ${sourcesResponse.status}`);
+  }
+
   if (!metaResponse.ok) {
     throw new Error(`Failed to load meta.json: ${metaResponse.status}`);
   }
 
-  const [companies, meta] = await Promise.all([companiesResponse.json(), metaResponse.json()]);
+  const [companies, jobs, sources, meta] = await Promise.all([
+    companiesResponse.json(),
+    jobsResponse.json(),
+    sourcesResponse.json(),
+    metaResponse.json()
+  ]);
 
-  return { companies, meta };
+  return { companies, jobs, sources, meta };
 }
 
 export function getIndustryGroup(industry) {
@@ -171,6 +186,58 @@ export function getIndustryGroup(industry) {
   }
 
   return "其他";
+}
+
+export function formatJobType(type) {
+  switch (type) {
+    case "intern":
+      return "实习";
+    case "campus":
+      return "校招";
+    case "full-time":
+      return "全职";
+    default:
+      return "未标注";
+  }
+}
+
+export function formatJobStatus(active) {
+  return active ? "仍在快照中" : "最近未再次出现";
+}
+
+export function formatFetchMode(mode) {
+  switch (mode) {
+    case "http":
+      return "HTTP 抓取";
+    case "browser":
+      return "浏览器抓取";
+    default:
+      return mode;
+  }
+}
+
+export function formatExtractMode(mode) {
+  switch (mode) {
+    case "rule":
+      return "规则提取";
+    case "llm":
+      return "LLM 提取";
+    default:
+      return mode;
+  }
+}
+
+export function formatCrawlPriority(priority) {
+  switch (priority) {
+    case "high":
+      return "高优先级";
+    case "medium":
+      return "中优先级";
+    case "low":
+      return "低优先级";
+    default:
+      return priority;
+  }
 }
 
 export function getIndustryGroups() {

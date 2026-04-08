@@ -14,6 +14,11 @@ export type JobUrlType =
   | "university_job_board"
   | "third_party_job_board";
 
+export type CrawlFetchMode = "http" | "browser";
+export type CrawlExtractMode = "rule" | "llm";
+export type CrawlPriority = "high" | "medium" | "low";
+export type JobType = "intern" | "campus" | "full-time";
+
 export type CampusHiringStatus = "active" | "likely_active" | "uncertain";
 export type ConfidenceLevel = "A" | "B" | "C";
 
@@ -60,4 +65,56 @@ export type Company = {
   cities: string[];
   tags: string[];
   evidence: Evidence[];
+};
+
+export type CrawlSource = {
+  id: string;
+  companyId: string;
+  companySlug: string;
+  label: string;
+  seedUrl: string;
+  resolvedUrl?: string;
+  sourceType: JobUrlType;
+  fetchMode: CrawlFetchMode;
+  extractMode: CrawlExtractMode;
+  priority: CrawlPriority;
+  intervalHours: number;
+  enabled: boolean;
+  notes?: string;
+  lastResolvedAt?: string;
+  lastCrawledAt?: string;
+  lastSuccessAt?: string;
+  lastError?: string;
+};
+
+export type Job = {
+  id: string;
+  companyId: string;
+  sourceId: string;
+  title: string;
+  location?: string;
+  department?: string;
+  jobType?: JobType;
+  education?: string;
+  deadline?: string;
+  applyUrl: string;
+  descriptionText?: string;
+  extractedFromUrl?: string;
+  fetchedAt?: string;
+  firstSeenAt: string;
+  lastSeenAt: string;
+  isActive: boolean;
+  fingerprint: string;
+};
+
+export type CrawlRun = {
+  id: string;
+  sourceId: string;
+  companyId: string;
+  startedAt: string;
+  completedAt?: string;
+  status: "success" | "no_jobs" | "error";
+  resolvedUrl?: string;
+  jobsFound: number;
+  errorMessage?: string;
 };

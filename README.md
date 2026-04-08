@@ -1,4 +1,4 @@
-# find-job
+# find-company
 
 一个面向中国校招信息整理的公司池项目。
 
@@ -15,7 +15,7 @@
 ## 目录说明
 
 ```text
-find-job/
+find-company/
 ├─ app/                        # 当前 Next.js 页面
 ├─ components/                 # 当前 Next.js 组件
 ├─ data/                       # 原始公司数据与 SQLite 数据文件
@@ -43,10 +43,15 @@ find-job/
 当前数据主文件：
 
 - `data/companies.json`
+- `data/crawl-sources.json`
+- `data/jobs.json`
+- `data/crawl-runs.json`
 
 静态站发布时使用的数据文件：
 
 - `site-static/data/companies.json`
+- `site-static/data/crawl-sources.json`
+- `site-static/data/jobs.json`
 - `site-static/data/meta.json`
 
 静态站数据由下面这个脚本同步生成：
@@ -60,6 +65,51 @@ node site-static/scripts/sync-data.mjs
 ```bash
 make sync-static
 ```
+
+## 岗位抓取 MVP
+
+当前仓库已经补上第一版“岗位发现 / 岗位抓取”链路，范围是：
+
+- 用 `data/crawl-sources.json` 维护抓取源
+- 用 `scripts/discover-job-pages.mjs` 发现更接近真实招聘页的 URL
+- 用 `scripts/crawl-jobs.mjs` 抓取岗位快照并写入 `data/jobs.json`
+- 用 `data/crawl-runs.json` 记录抓取结果
+
+先看抓取源：
+
+```bash
+sed -n '1,120p' data/crawl-sources.json
+```
+
+发现招聘页：
+
+```bash
+npm run jobs:discover
+```
+
+只跑单家公司：
+
+```bash
+npm run jobs:discover -- --company=huawei
+```
+
+抓取岗位快照：
+
+```bash
+npm run jobs:crawl
+```
+
+只跑单家公司：
+
+```bash
+npm run jobs:crawl -- --company=huawei
+```
+
+说明：
+
+- 第一版是规则提取优先，宁可少抓，也先避免明显误抓
+- 某些官网对纯 HTTP 请求不友好，后续需要补 `browser` 模式
+- 抓取完成后，再执行 `make sync-static` 可把岗位快照同步到 `site-static/`
 
 ## 本地开发
 
@@ -149,7 +199,7 @@ http://127.0.0.1:4173
 ### 1. 构建镜像
 
 ```bash
-docker build -t find-job:latest .
+docker build -t find-company:latest .
 ```
 
 或者：
@@ -161,7 +211,7 @@ make docker-build
 如果你当前是在 Mac，想打一个可在 `x86/amd64` 环境运行的镜像，使用 `buildx`：
 
 ```bash
-docker buildx build --platform linux/amd64 -t find-job:amd64 --load .
+docker buildx build --platform linux/amd64 -t find-company:amd64 --load .
 ```
 
 或者：
@@ -179,7 +229,7 @@ make docker-build-amd64
 ### 2. 启动容器
 
 ```bash
-docker run --rm -p 3000:3000 find-job:latest
+docker run --rm -p 3000:3000 find-company:latest
 ```
 
 或者：
@@ -210,6 +260,8 @@ make dev
 make build
 make start
 make db-seed
+make jobs-discover
+make jobs-crawl
 make sync-static
 make preview-static
 make docker-build
@@ -236,10 +288,11 @@ GitHub 仓库中需要设置：
 
 部署步骤：
 
-1. 更新根目录的 `data/companies.json`
-2. 执行 `node site-static/scripts/sync-data.mjs`
-3. 提交并推送到 `main`
-4. 等待 GitHub Actions 自动发布 `site-static/`
+1. 更新根目录的 `data/companies.json` 或抓取相关数据文件
+2. 如需刷新岗位快照，执行 `npm run jobs:crawl`
+3. 执行 `node site-static/scripts/sync-data.mjs`
+4. 提交并推送到 `main`
+5. 等待 GitHub Actions 自动发布 `site-static/`
 
 更详细的说明见：
 
